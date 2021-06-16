@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="home" onclick="onClick()">Click</div>
+
+    <script>
+        function onClick() {
+            try {
+                fetch('https://medium.com/search?q=pricing').then((response) => {
+                    console.log(response)
+                    const responseJSON = JSON.parse(JSON.stringify(response.data));
+                    console.log(responseJSON.substring(0, 1000));
+                    document.getElementById("home").innerHTML = reponse.data
+                })
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+
+</html>
