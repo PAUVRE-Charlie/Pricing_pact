@@ -1,0 +1,11 @@
+{
+  "name": "pricing_pact",
+  "version": "1.0.0",
+  "description": "Technical test for internship",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Charlie Pauvré",
+  "license": "ISC"
+}
