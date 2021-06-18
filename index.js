@@ -1,26 +1,31 @@
-const express = require('express');
-const request = require('request');
-var cors = require('cors')
+const axios = require('axios');
+const fs = require('fs')
 
-const app = express();
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-app.get('/', cors(), (req, res) => {
-  request(
-    { url: 'https://dog.ceo/api/breeds/list/all' },
-    (error, response, body) => {
-      if (error || response.statusCode !== 200) {
-        return res.status(500).json({ type: 'error', message: err.message });
-      }
-
-      console.log(res.json(JSON.parse(body)))
+async function getData() {
+    try {
+        // https://dog.ceo/api/breeds/list/all
+        await axios.get('https://medium.com/search?q=pricing', {
+            //headers: {"Access-Control-Allow-Origin": "*"}
+        } ).then((response) => {
+            const responseJSONNoWhile = JSON.parse(response.data.substring(16));
+            // console.log(responseJSONNoWhile)
+            const posts = responseJSONNoWhile.payload.value.posts;
+            const users = responseJSONNoWhile.payload.references.User;
+            console.log(users)
+            const postsWithEssentialData = posts.map(post => ({id: post.id, author: users[post.creatorId].name, description: post.title, publicationDate: new Date(post.firstPublishedAt)}))
+            console.log(postsWithEssentialData)
+            fs.writeFile('./posts.json', JSON.stringify(postsWithEssentialData), 'utf8', (err) => {
+                if (err) {
+                    console.log(`Error writing file: ${err}`);
+                } else {
+                    console.log(`File is written successfully!`);
+                }
+            });
+        })
+        
+    } catch (error) {
+        console.error(error);
     }
-  )
-});
+}
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`listening on ${PORT}`));
+getData()
